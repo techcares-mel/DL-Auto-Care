@@ -1,0 +1,14 @@
+# Design reference — do not ship
+wise.design__ref=godly.png
+
+# QA screenshots
+screenshot-*.png
+ss-*.png
+
+# Node (Puppeteer)
+node_modules/
+package*.json
+
+# OS
+.DS_Store
+Thumbs.db
