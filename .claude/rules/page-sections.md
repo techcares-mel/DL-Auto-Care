@@ -1,101 +1,158 @@
 # Page Sections
 
-Build these sections in order inside `index.html`. Every section must have `class="animate"` on its key elements — see `animations.md`.
+All sections live in `wordpress-theme/template-parts/`. Loaded via `get_template_part()` in `front-page.php`. Every key element must have `.animate` (or a variant) — see `animations.md`.
 
-## 1 — Navigation (sticky)
+---
 
-- Position: `sticky top-0`, `z-index: 100`
-- Background: `rgba(13,13,13,0.85)` with `backdrop-filter: blur(12px)` when scrolled
-- Left: `DLAUto logo.png` (height 40px)
-- Centre (desktop): links — Services, About, Gallery, Contact — smooth-scroll anchors
-- Right: "Book Now" primary pill button → scrolls to `#contact`
-- Mobile (`≤768px`): hamburger icon; tap opens full-screen dark overlay nav with large links
+## 0 — Holiday Banner (`section-banner.php`)
 
-## 2 — Hero
+Rendered in `header.php` **before** the `<nav>`. Only shown when enabled in WP Admin → Settings → Holiday Banner.
+
+- Fixed position at top of viewport (`position: fixed; top: 0; z-index: 300; width: 100%`)
+- JS adjusts nav `top` and body `padding-top` to actual rendered banner height on load + resize
+- **Types**: info (green `#7ED321`), warning (amber `#f5a623`), closed (red `#d0021b`)
+- **Dismissible**: optional ✕ button; dismissed state stored in `localStorage` keyed by message hash
+- **Auto-hide**: if an end date is set, PHP hides banner after that date (`current_time('Y-m-d')`)
+- **Admin fields** (Settings → Holiday Banner):
+  - Enable / Disable toggle
+  - Banner type (info / warning / closed)
+  - Message text — keep under 100 chars for single-line display
+  - Start date (optional — leave blank to show immediately when enabled)
+  - End date (optional — banner auto-hides after this date)
+  - Allow visitors to dismiss (checkbox)
+- Admin page shows a live colour preview of the banner below the form
+
+---
+
+## 1 — Navigation (`header.php`)
+
+- `position: fixed; top: 0; z-index: 200`
+- When WP admin bar visible: `.admin-bar .nav { top: 32px; }`
+- When banner is active: JS sets `nav.style.top = banner.offsetHeight + 'px'`
+- Logo: `the_custom_logo()` or fallback `assets/images/logo.png` (height 57px)
+- Centre links (desktop): Services · About · Gallery · Team · Contact — smooth-scroll `#` anchors
+- Right: "Book Now" primary pill → `#contact`
+- Mobile (≤768px): hamburger → full-screen overlay (`position: fixed; inset: 0`) with large links + close button
+
+---
+
+## 2 — Hero (`section-hero.php`)
 
 - Height: `100svh` (fallback `100vh`)
-- Background: `image1.webp` as `object-fit: cover` with `opacity: 0.35` overlay on a dark base, OR dark bg with a radial green glow (`radial-gradient`) on one side
-- Content centred or left-aligned:
-  - Eyebrow pill: "Braybrook VIC 3019 · Smash & Mechanical"
-  - **Headline** (display size): "Done With Satisfaction."
-  - Sub-headline: "Melbourne's trusted smash & mechanical repair specialists."
-  - Two buttons: "Get a Quote" (primary) + "Our Services" (ghost)
-- Animated scroll-down indicator at bottom centre (CSS bounce animation)
+- Background: `dl_gallery_image1` Customizer image (fallback `assets/images/image1.webp`), `object-fit: cover`, dark gradient overlay
+- Content (left-aligned):
+  - Eyebrow pill: address from `dl_contact_address` Customizer setting
+  - Headline line 1: `dl_hero_headline1` (default: "Done With")
+  - Headline line 2: `dl_hero_headline2` (default: "Satisfaction.") — rendered in green `<em>`
+  - Sub-headline: `dl_hero_sub`
+  - Buttons: "Get a Quote" (primary → `#contact`) + "Our Services" (ghost → `#services`)
+  - Tag pills: hardcoded service highlights
+- Scroll indicator: bouncing chevron at bottom-centre
+- Hero elements animate on load via CSS `@keyframes heroIn` with staggered delays
 
-## 3 — Services
+---
+
+## 3 — Marquee (`section-marquee.php`)
+
+- Green background (`var(--g)`), infinite horizontal scroll strip
+- 10 service names, duplicated for seamless CSS marquee loop
+- Hardcoded (rarely changes; no CMS needed)
+
+---
+
+## 4 — Services (`section-services.php`)
 
 - Anchor: `id="services"`
-- Section headline: "What We Fix"
-- **Grid**: 3 columns desktop → 2 tablet → 1 mobile; `gap: 16px`
-- Six cards (dark surface, green accent number or icon):
-  1. Smash Repair — panel beating, dent removal, paint matching
-  2. Mechanical Repair — engine, suspension, brakes, servicing
-  3. Spray Painting — full resprays, spot repairs, colour matching
-  4. Windscreen Repair — chip & crack repair, full replacement
-  5. Wheel & Tyre — alignment, balancing, tyre replacement
-  6. Log Book Service — manufacturer-scheduled servicing
-- Each card: bold number (01–06) in green, card title, short 1-sentence description
+- **Dynamic**: `WP_Query` on `service` CPT, ordered by `menu_order` then `date ASC`
+- First post → wide "featured" card (`grid-column: span 3`)
+- Remaining posts → standard service cards in 3-col → 2-col → 1-col grid
+- Each card: `_service_number` meta (ghost background via CSS `::before { content: attr(data-n) }`), post title, `_service_description` meta
+- Last card is always the static CTA "Not Sure What You Need?" card (hardcoded)
+- Empty state: message pointing client to WP Admin → Services → Add New
 
-## 4 — About
+**CPT slug**: `service` | **Meta**: `_service_number`, `_service_description`
+
+---
+
+## 5 — Statement Band (`section-statement.php`)
+
+- Green background (`var(--g)`), 2-column layout (text left, stats right)
+- "Quality work. Honest price. Every time." — hardcoded brand promise
+- 3 stats: 500+ cars, 15 yrs, 5★ — hardcoded
+- Static section — no CMS fields needed
+
+---
+
+## 6 — About (`section-about.php`)
 
 - Anchor: `id="about"`
-- Two-column desktop (image left, text right) → stacked mobile (image on top)
-- **Left**: `image2.webp` as a tall card (`aspect-ratio: 3/4`, `object-fit: cover`, `border-radius: 24px`)
-- **Right**:
-  - Eyebrow label: "About Us"
-  - Headline: "We Take Pride in Every Job"
-  - Body: 2–3 sentences about quality, satisfaction guarantee, experienced Melbourne team
-  - Three stat pills in a row (or column on mobile):
-    - "15+ Years Experience"
-    - "500+ Cars Repaired"
-    - "100% Satisfaction"
+- 2-column desktop → stacked mobile
+- Image: `dl_gallery_image2` Customizer (fallback `assets/images/image2.webp`), `aspect-ratio: 3/4`, green top accent via `::after`
+- Body from Customizer: `dl_about_p1`, `dl_about_p2` (two paragraphs)
+- 3 stat pills from Customizer: `dl_about_stat{1-3}_v` (value) + `dl_about_stat{1-3}_l` (label)
+- Buttons: "Book a Service" (primary) + phone number (ghost, `href="tel:..."`)
 
-## 5 — Gallery (Bento Grid)
+---
+
+## 7 — Gallery / Bento (`section-gallery.php`)
 
 - Anchor: `id="gallery"`
-- Section headline: "Our Work"
-- CSS Grid bento layout with `grid-template-areas` — mix of large, medium, and small cells
-- Suggested layout (desktop):
-  ```
-  "big   big   small1"
-  "big   big   small2"
-  "med1  med2  small2"
-  ```
-- Cells:
-  - `big`: `image1.webp` (engine work close-up)
-  - `med1`: `image2.webp` (shop/team)
-  - `med2`: dark card with green text "Panel Beating & Smash Repair"
-  - `small1`: green bg card — "Spray Painting"
-  - `small2`: dark card — "Engine & Mechanical"
-- All image cells: `overflow: hidden`; image scales `1.05` on hover (`transition: transform 0.4s ease`)
-- Mobile: single column stack
+- 12-col CSS Grid, `grid-template-rows: 360px 360px`
+- Row 1: main image `c7 r2` (spans 2 rows), text card `c3`, green number cell `c2`
+- Row 2: secondary image `c5`, text card `c3`, green text card `c4`
+- Images from Customizer: `dl_gallery_image1` (large), `dl_gallery_image2` (medium)
+- Image hover: `transform: scale(1.05)` on the `<img>`
+- Text cells: hardcoded labels (rarely change)
+- Mobile: single-column stack, fixed cell heights
 
-## 6 — Testimonials
+---
+
+## 8 — Testimonials (`section-testimonials.php`)
 
 - Anchor: `id="testimonials"`
-- Dark section, headline: "What Our Customers Say"
-- Three cards, horizontal row desktop → swipeable carousel (CSS scroll-snap) on mobile
-- Each card: 5 green stars, quote text (2–3 sentences), customer first name + suburb
+- **Dynamic**: `WP_Query` on `testimonial` CPT, `menu_order` then `date ASC`
+- Desktop: 3-column grid | Mobile: CSS scroll-snap horizontal carousel
+- Each card: 5 stars, `_testimonial_quote`, avatar initial circle, post title (customer name), `_testimonial_suburb`
+- Empty state: friendly message pointing to WP Admin → Testimonials → Add New
 
-Sample quotes (placeholder, user can update):
-- *"DL Auto Care had my car looking brand new after a nasty dent. Fast, affordable, and they kept me updated the whole time."* — Michael T., Braybrook
-- *"Honest mechanics who don't overcharge. My log book service was done same day."* — Sarah K., Footscray
-- *"The spray paint match was perfect — couldn't tell there was ever any damage."* — James L., Sunshine
+**CPT slug**: `testimonial` | **Meta**: `_testimonial_quote`, `_testimonial_suburb` | **Post title**: customer name
 
-## 7 — Contact / CTA
+---
+
+## 9 — Team (`section-team.php`)
+
+- Anchor: `id="team"`
+- Section headline: "The People Behind the Work"
+- **Dynamic**: `WP_Query` on `team_member` CPT, `menu_order` then `date ASC`
+- Grid: 4 columns desktop → 2 columns tablet/mobile
+- Each card:
+  - Photo: WordPress Featured Image, `aspect-ratio: 1/1`, `object-fit: cover center top`
+  - Placeholder SVG person shown if no featured image set
+  - Name: post title (Syne bold)
+  - Role: `_team_job_title` meta (green, uppercase, small caps style)
+- Card hover: green border + `translateY(-4px)` lift
+- Empty state: message pointing to WP Admin → Team → Add New
+
+**CPT slug**: `team_member` | **Meta**: `_team_job_title` | **Featured Image**: team member photo
+
+---
+
+## 10 — Contact (`section-contact.php`)
 
 - Anchor: `id="contact"`
-- Full-width section, background: `var(--color-card-green)` or a dark green gradient
-- Large headline: "Ready to Book?"
-- Details block:
-  - 📍 1 Lacy Street, Braybrook VIC 3019
-  - 📞 0423 310 713
-- Two buttons: "Call Us Now" (`href="tel:0423310713"`) + "Get Directions" (links to Google Maps)
-- Optional: Google Maps embed `<iframe>` below the CTA
+- Background: `var(--sg)` light green
+- 2-column desktop → stacked mobile
+- Left: eyebrow "Get In Touch", headline "Ready to Book?", sub-text, CTA buttons
+  - "Call [phone]" → `href="tel:..."` using `dl_contact_phone` Customizer value
+  - "Get Directions" → `dl_contact_maps_url` Customizer value
+- Right: 4 info cards (📍 address, 📞 phone, 🕐 hours, 🔧 specialties)
+  - Address, phone, hours from Customizer settings
 
-## 8 — Footer
+---
 
-- Logo (white/green version, height 36px)
-- Tagline: "Done With Satisfaction"
-- Two link columns: Navigation (Services, About, Gallery, Contact) + Services (Smash Repair, Mechanical, Spray Painting, Windscreen)
-- Bottom bar: "© 2025 DL Auto Care Pty Ltd · 1 Lacy Street, Braybrook VIC 3019"
+## 11 — Footer (`footer.php`)
+
+- Background: `#1a2c0e` (dark green)
+- 3-column grid: brand (logo + tagline) + Navigate links + Services links
+- Logo: `the_custom_logo()` fallback to `assets/images/logo.png` (height 48px)
+- Copyright bar: dynamic year `date('Y')` + address from `dl_contact_address` Customizer

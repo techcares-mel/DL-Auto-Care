@@ -1,81 +1,114 @@
 # Tech Stack & Implementation Constraints
 
 ## Stack
+- **WordPress** on GoDaddy Managed WordPress hosting
+- **Custom PHP theme** in `wordpress-theme/` — no page builder, no Elementor, no ACF required
+- **CSS** in `wordpress-theme/style.css` — CSS custom properties for all tokens
+- **JS** in `wordpress-theme/assets/js/main.js` — vanilla JS, no transpilation, no libraries
+- **Google Fonts** — loaded via `wp_enqueue_style` in `functions.php`
 
-- **HTML5** — single `index.html` file
-- **CSS3** — either embedded `<style>` or a linked `style.css`; CSS custom properties for all tokens
-- **Vanilla JS** — either embedded `<script>` or a linked `script.js`; no transpilation required
-- **Google Fonts** — loaded via `<link>` in `<head>`
+The static `index.html` remains in the repo as a design reference / demo only.
 
-No frameworks, no build tools, no package managers, no CDN JS libraries (no jQuery, no GSAP, no AOS, no Bootstrap).
+## Zero Plugin Dependency Rule
+The theme must work fully without any specific plugin installed. All CMS features use:
+- `register_post_type()` — Custom Post Types
+- `add_meta_box()` — admin fields for CPTs
+- `customize_register` hook — Customizer panels for global settings
+- `get_option()` / `update_option()` — Holiday Banner settings
+- `add_options_page()` — Holiday Banner admin page
 
-## What IS Allowed
+ACF (Advanced Custom Fields) is **not** required.
 
-- CSS Grid and Flexbox (use both freely)
-- CSS custom properties (`var(--token)`)
-- CSS `@keyframes` and `transition`
-- Native browser APIs: `IntersectionObserver`, `scroll`, `matchMedia`
-- `<picture>` and `srcset` for responsive images
-- Google Fonts `<link>` tag
-- Google Maps `<iframe>` embed for the contact section
+## WordPress Coding Standards
+All code must follow these rules — no exceptions:
 
-## File Structure
+**Output escaping (use the right function for context):**
+- HTML text: `esc_html()`
+- HTML attributes: `esc_attr()`
+- URLs: `esc_url()`
+- Textarea content: `esc_textarea()`
+- JS strings: `esc_js()`
+
+**Input sanitization on save:**
+- Single-line text: `sanitize_text_field()`
+- Multi-line: `sanitize_textarea_field()`
+- URLs: `esc_url_raw()`
+- Keys/slugs: `sanitize_key()`
+
+**Nonces** — every form submission must verify a nonce before saving data.
+
+**Hooks:**
+- Always use `wp_enqueue_scripts` to load CSS/JS — never hardcode `<link>` or `<script>` in templates
+- Call `wp_head()` before `</head>` in `header.php`
+- Call `wp_footer()` before `</body>` in `footer.php`
+- Use `wp_body_open()` immediately after `<body>` in `header.php`
+
+**Body & HTML tags:**
+- `<html <?php language_attributes(); ?>>` on html element
+- `<body <?php body_class(); ?>>` on body element
+- `<meta charset="<?php bloginfo('charset'); ?>">` — no hardcoded charset
+
+## Theme File Structure
 
 ```
-DL Auto/
-├── index.html            ← main deliverable
-├── style.css             ← optional external stylesheet
-├── script.js             ← optional external JS
-├── DLAUto logo.png       ← logo — reference as src="DLAUto logo.png"
-├── image1.webp           ← mechanic on engine
-├── image2.webp           ← DL Auto Care mechanic
-├── wise.design__ref=godly.png  ← design reference only, do not ship
-└── CLAUDE.md
+wordpress-theme/
+├── style.css                    ← WordPress theme header + all CSS
+├── functions.php                ← Theme setup, CPTs, meta boxes, Customizer, Banner admin
+├── front-page.php               ← Homepage template
+├── header.php                   ← <html>, <head>, wp_head(), nav, mobile nav
+├── footer.php                   ← Footer HTML, wp_footer(), </body>, </html>
+├── 404.php                      ← Simple not-found page
+├── assets/
+│   ├── js/main.js               ← Nav, hamburger, IntersectionObserver, banner dismiss
+│   └── images/                  ← logo.png, image1.webp, image2.webp (theme fallbacks)
+└── template-parts/
+    ├── section-banner.php       ← Holiday banner (conditional)
+    ├── section-hero.php
+    ├── section-marquee.php
+    ├── section-services.php     ← WP_Query on 'service' CPT
+    ├── section-statement.php
+    ├── section-about.php
+    ├── section-gallery.php
+    ├── section-testimonials.php ← WP_Query on 'testimonial' CPT
+    ├── section-team.php         ← WP_Query on 'team_member' CPT
+    └── section-contact.php
 ```
 
-All asset paths in HTML must be relative (e.g., `src="image1.webp"`, not absolute paths).
+## Deploy Workflow
 
-## Head Tags (Required)
-
-```html
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="DL Auto Care Pty Ltd — Smash & Mechanical Repair. 1 Lacy Street, Braybrook VIC 3019. Call 0423 310 713.">
-<meta property="og:title" content="DL Auto Care — Done With Satisfaction">
-<meta property="og:description" content="Melbourne's trusted smash & mechanical repair specialists.">
-<meta property="og:image" content="image2.webp">
-<title>DL Auto Care — Smash & Mechanical Repair, Braybrook VIC</title>
-<link rel="icon" href="DLAUto logo.png">
 ```
+Local edit → git push → GitHub Actions:
+  1. PHP lint (syntax check all .php files)
+  2. SFTP deploy → GoDaddy staging (only wordpress-theme/ folder)
+→ Review on staging URL
+→ GoDaddy "Push to Live" → Production
+```
+
+Required GitHub Secrets: `FTP_HOST`, `FTP_USER`, `FTP_PASS`, `FTP_PORT`
+
+## Plugin Compatibility
+- Always call `wp_head()` and `wp_footer()` so plugins can inject their assets
+- Prefix all custom CSS classes that could conflict: banner uses `dl-banner__*` namespace
+- Register theme features via `add_theme_support()` inside `after_setup_theme`
+- Don't suppress the admin bar — offset the fixed nav: `.admin-bar .nav { top: 32px; }`
+- Use `body_class()` so plugin-added body classes work correctly
 
 ## Performance Rules
-
-- Lazy-load all images below the fold: `loading="lazy"` on `<img>` tags
-- Hero background image may be set via CSS `background-image` for the overlay technique, or as an `<img>` with `fetchpriority="high"`
-- No render-blocking JS: place `<script>` tags before `</body>` or use `defer`
-- No unused CSS — write only what is needed for the sections being built
+- Enqueue JS with last argument `true` to place in footer
+- `loading="lazy"` on all images below the fold
+- `fetchpriority="high"` on hero image only
+- Maximum 3 WP_Query calls per page load (services, testimonials, team)
 
 ## Accessibility Rules
-
-- All `<img>` tags must have descriptive `alt` attributes
-- Interactive elements (buttons, links) must be keyboard-focusable — do not suppress `:focus` outline entirely; style it with the green accent instead
-- Colour contrast must meet WCAG AA: ≥ 4.5:1 for body text, ≥ 3:1 for large text
-- Nav must include `<nav>` landmark; main content in `<main>`; footer in `<footer>`
-- Hamburger button: `aria-label="Open menu"`, `aria-expanded` toggled by JS
-
-## Smooth Scroll
-
-```css
-html { scroll-behavior: smooth; }
-```
-
-All anchor `href="#section-id"` links benefit from this automatically.
+- All `<img>` must have descriptive `alt` attributes
+- Interactive elements keyboard-focusable; use green accent for `:focus-visible`
+- WCAG AA: ≥ 4.5:1 body text, ≥ 3:1 large text
+- Semantic HTML: `<nav>`, `<main>`, `<footer>`, `<section>`
+- Hamburger: `aria-label="Open menu"`, `aria-expanded` toggled by JS
 
 ## CSS Reset / Base
-
-Include a minimal reset at the top of the stylesheet:
-
 ```css
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 img, video { max-width: 100%; height: auto; display: block; }
+html { scroll-behavior: smooth; }
 ```
