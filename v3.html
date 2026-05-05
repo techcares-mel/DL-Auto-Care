@@ -11,7 +11,8 @@
   <link rel="icon" href="DLAUto logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&display=swap" rel="stylesheet">
   <style>
     /* ── Reset ──────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -19,20 +20,24 @@
 
     /* ── Tokens ─────────────────────────────────────────────────── */
     :root {
-      --g:    #5d9e0f;   /* darker green — readable on white */
-      --gd:   #447309;
-      --gdim: rgba(93,158,15,0.1);
-      --bg:   #ffffff;   /* pure white */
-      --s1:   #f7f7f7;   /* light grey card */
-      --s2:   #efefef;
-      --sg:   #f2fae6;   /* very light green accent section */
-      --w:    #111111;   /* near-black text */
-      --m:    #555555;   /* mid-grey muted */
-      --br:   rgba(0,0,0,0.08);
-      --r:    24px;
+      --g:    #68dc80;            /* lime green — CTAs & highlights */
+      --gd:   #4fbe65;
+      --gdim: rgba(104,220,128,.12);
+      --teal: #1b5b4a;            /* primary dark teal */
+      --teal2:#124e52;
+      --hl:   #ffc422;            /* yellow text highlight */
+      --bg:   #fafdfa;            /* off-white page bg */
+      --s1:   #ffffff;            /* white cards */
+      --s2:   #f7f7f7;
+      --sg:   #ecfbf5;            /* light teal-tinted sections */
+      --w:    #1c1a1d;
+      --m:    rgba(2,13,10,.65);
+      --br:   rgba(2,13,10,.15);
+      --r:    10px;
       --rp:   999px;
       --cw:   1200px;
       --gap:  16px;
+      --footer:#1b2523;
     }
 
     /* ── Base ───────────────────────────────────────────────────── */
@@ -463,52 +468,119 @@
       .contact-btns .btn { width:100%; justify-content:center; }
     }
 
-    /* ══ V3 CLEAN OVERRIDES ═════════════════════════════════════ */
-    /* Nav: always white with border, no transparent phase */
-    .nav { background:#fff; border-bottom:1px solid rgba(0,0,0,.07); }
-    .nav.scrolled { background:#fff; backdrop-filter:none; -webkit-backdrop-filter:none; border-bottom-color:rgba(0,0,0,.1); }
-    .nav-links a { color:#555; }
-    .nav-links a:hover { color:#111; }
-    .nav-fb { color:#555; }
-    .nav-fb:hover { background:var(--gdim); color:var(--g); }
+    /* ══ V3 — TECHCARES STYLE ═══════════════════════════════════ */
 
-    /* Hero: split layout — text left, image right */
+    /* Typography: Clash Grotesk for all headings */
+    h1,h2,h3,h4 { font-family:'Clash Grotesk',sans-serif; font-weight:600; }
+    h2.big { font-family:'Clash Grotesk',sans-serif; font-weight:600; letter-spacing:-.025em; }
+
+    /* Buttons: rounded rect (10px), lime green */
+    .btn { border-radius:10px; font-weight:500; }
+    .btn-primary { background:var(--g); color:var(--w); }
+    .btn-primary:hover { background:var(--gd); }
+    .btn-ghost { color:var(--w); border-color:rgba(2,13,10,.22); }
+    .btn-ghost:hover { border-color:var(--teal); color:var(--teal); background:rgba(27,91,74,.05); }
+    .about-body .btn-ghost,.sec-g .btn-ghost { color:var(--w); border-color:rgba(2,13,10,.22); }
+    .about-body .btn-ghost:hover,.sec-g .btn-ghost:hover { border-color:var(--teal); color:var(--teal); background:rgba(27,91,74,.05); }
+
+    /* Nav: always white, teal hover */
+    .nav { background:#fff; border-bottom:1px solid rgba(2,13,10,.08); }
+    .nav.scrolled { background:#fff; backdrop-filter:none; -webkit-backdrop-filter:none; border-bottom-color:rgba(2,13,10,.1); box-shadow:0 1px 24px rgba(0,0,0,.06); }
+    .nav-links a { color:rgba(2,13,10,.65); }
+    .nav-links a:hover { color:var(--teal); }
+    .nav-fb { color:rgba(2,13,10,.45); }
+    .nav-fb:hover { color:var(--teal); background:rgba(27,91,74,.08); }
+
+    /* Eyebrow */
+    .eyebrow { color:var(--teal); }
+    .eyebrow::before { background:var(--teal); }
+
+    /* Pill tags */
+    .p-grn { background:var(--gdim); color:var(--teal); border-color:rgba(104,220,128,.4); }
+
+    /* Hero: split layout */
     .hero { background:var(--bg); }
-    .hero-bg { display:none; }          /* hide the full-bleed bg */
+    .hero-bg { display:none; }
     .hero-content { padding-top:0; padding-bottom:0; width:100%; }
-    .hero-split { display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center; padding-top:120px; padding-bottom:80px; }
-    .hero-split-img { border-radius:28px; overflow:hidden; aspect-ratio:3/4; box-shadow:0 20px 56px rgba(0,0,0,.1); }
+    .hero-split { display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center; padding-top:130px; padding-bottom:100px; }
+    .hero-split-img { border-radius:20px; overflow:hidden; aspect-ratio:3/4; box-shadow:0 20px 60px rgba(0,0,0,.1); }
     .hero-split-img img { width:100%; height:100%; object-fit:cover; object-position:center top; }
-    .scroll-ind { color:#999; }
 
-    /* Hero text: dark on white */
-    .hero-h1  { color:var(--w); }
-    .hero-sub { color:var(--m); }
-    .hero-btns .btn-ghost { color:var(--w); border-color:rgba(0,0,0,.2); }
-    .hero-btns .btn-ghost:hover { border-color:var(--w); background:rgba(0,0,0,.04); }
+    /* Hero text */
+    .hero-h1 { font-family:'Clash Grotesk',sans-serif; font-weight:600; color:var(--w); font-size:clamp(2.6rem,7vw,5.5rem); letter-spacing:-.025em; line-height:1.1; margin-bottom:24px; }
+    .hero-h1 em { font-style:normal; color:var(--teal); position:relative; display:inline; }
+    .hero-h1 em::after { content:''; position:absolute; bottom:2px; left:-2px; right:-2px; height:32%; background:var(--hl); z-index:-1; border-radius:3px; }
+    .hero-sub { color:rgba(2,13,10,.65); line-height:1.72; }
+    .hero-loc { background:rgba(27,91,74,.08); border-color:rgba(27,91,74,.2); color:var(--teal); }
+    .hero-btns .btn-ghost { color:var(--w); border-color:rgba(2,13,10,.2); }
+    .hero-btns .btn-ghost:hover { border-color:var(--teal); color:var(--teal); }
+    .scroll-ind { color:rgba(2,13,10,.3); }
 
-    /* Statement band: soft tint instead of vivid green */
-    .statement-band { background:var(--sg); }
-    .statement-h { color:var(--w); }
+    /* Marquee: dark teal */
+    .mq-wrap { background:var(--teal); }
+    .mq-item { color:#fff; }
+    .mq-dot { background:rgba(255,255,255,.25); }
+
+    /* Service cards: white + shadow */
+    .svc-card { background:#fff; box-shadow:0 4px 24px rgba(0,0,0,.06); border-color:rgba(2,13,10,.1); }
+    .svc-card:hover { border-color:rgba(27,91,74,.4); transform:translateY(-5px); background:#fff; }
+    .svc-card h3 { font-family:'Clash Grotesk',sans-serif; font-weight:600; }
+    .svc-card::before { color:rgba(27,91,74,.1); }
+    .svc-n { color:var(--teal); }
+    .svc-feat { background:var(--sg); border-color:rgba(27,91,74,.2); }
+    .svc-cta { background:var(--sg); border-color:rgba(27,91,74,.2); }
+    .svc-cta .svc-arrow { color:var(--teal); }
+
+    /* Statement band: dark teal (TechCares's signature dark section) */
+    .statement-band { background:var(--teal); padding-block:100px; }
+    .statement-tag { color:rgba(255,255,255,.5); }
+    .statement-h { color:#fff; }
     .statement-num { color:var(--g); }
-    .statement-num em { color:var(--m); }
-    .statement-stat p { color:var(--m); }
-    .statement-tag { color:var(--m); }
-    .statement-stat { border-left-color:rgba(0,0,0,.12); }
+    .statement-num em { color:rgba(255,255,255,.55); }
+    .statement-stat p { color:rgba(255,255,255,.6); }
+    .statement-stat { border-left-color:rgba(255,255,255,.15); }
 
-    /* Section alternating: use very light tones */
-    .sec-dk { background:var(--s1); }
+    /* Section backgrounds */
+    .sec-dk { background:var(--sg); }
     .sec-g   { background:var(--sg); }
 
-    /* About ghost button: matches dark-on-white */
-    .about-body .btn-ghost, .sec-g .btn-ghost { color:var(--w); border-color:rgba(0,0,0,.2); }
-    .about-body .btn-ghost:hover, .sec-g .btn-ghost:hover { border-color:var(--w); background:rgba(0,0,0,.04); }
+    /* About */
+    .about-img::after { background:linear-gradient(to right,var(--teal),transparent); }
+    .stat strong { color:var(--teal); }
+    .stat { background:var(--s1); box-shadow:0 2px 12px rgba(0,0,0,.05); }
 
-    /* Marquee: slightly darker green bg for contrast on white page */
-    .mq-wrap { background:var(--g); }
+    /* Bento */
+    .bento-txt { background:#fff; box-shadow:0 4px 20px rgba(0,0,0,.05); }
+    .bento-txt.grn { background:var(--sg); border-color:rgba(27,91,74,.2); box-shadow:none; }
+    .bento-num { background:var(--teal); }
+    .bento-num span { color:#fff; }
+    .bento-num p { color:rgba(255,255,255,.6); }
+    .bento-lbl { color:var(--teal); }
 
-    /* Footer: neutral charcoal */
-    .footer { background:#1a1a1a; }
+    /* Testimonials */
+    .stars span { color:var(--g); }
+    .testi-card { background:#fff; box-shadow:0 4px 24px rgba(0,0,0,.06); border-color:rgba(2,13,10,.1); }
+    .testi-card:hover { border-color:rgba(27,91,74,.3); }
+    .testi-av { background:var(--sg); border-color:rgba(27,91,74,.3); color:var(--teal); }
+
+    /* Team */
+    .team-card { background:#fff; box-shadow:0 4px 20px rgba(0,0,0,.06); border-color:rgba(2,13,10,.1); }
+    .team-card:hover { border-color:rgba(27,91,74,.4); }
+    .team-av { background:rgba(27,91,74,.1); border-color:rgba(27,91,74,.25); color:var(--teal); }
+    .team-role { color:var(--teal); }
+
+    /* Contact cards */
+    .contact-card { background:rgba(2,13,10,.04); border-color:rgba(2,13,10,.1); }
+    .cc-body strong { color:var(--teal); }
+
+    /* Back to top */
+    .back-top { background:var(--teal); color:#fff; }
+    .back-top:hover { background:var(--teal2); }
+
+    /* Footer */
+    .footer { background:var(--footer); }
+    .foot-social:hover { background:var(--g); color:var(--w); }
+    .foot-col ul a:hover { color:var(--g); }
 
     @media (max-width:900px) {
       .hero-split { grid-template-columns:1fr; padding-top:120px; gap:36px; }
