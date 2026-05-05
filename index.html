@@ -383,6 +383,8 @@
     .foot-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
     .foot-col ul a { font-size:.88rem; color:rgba(255,255,255,.5); transition:color .2s; }
     .foot-col ul a:hover { color:var(--g); }
+    .foot-social { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.1); color:rgba(255,255,255,.55); transition:background .2s,color .2s; flex-shrink:0; }
+    .foot-social:hover { background:var(--g); color:#0d0d0d; }
     .foot-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:28px; border-top:1px solid rgba(255,255,255,.06); font-size:.78rem; color:rgba(255,255,255,.4); }
 
     /* ══ DEMO BADGE ══════════════════════════════════════════════ */
@@ -863,6 +865,10 @@
             Call 0423 310 713
           </a>
           <a href="https://maps.google.com/?q=2-3/9+Lacy+St+Braybrook+VIC+3019" target="_blank" rel="noopener" class="btn btn-ghost">Get Directions</a>
+          <a href="https://www.facebook.com/dlautocare" target="_blank" rel="noopener" class="btn btn-ghost" aria-label="Facebook">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            Facebook
+          </a>
         </div>
       </div>
 
@@ -898,8 +904,11 @@
       <div class="foot-brand animate">
         <img src="DLAUto logo.png" alt="DL Auto Care" loading="lazy">
         <p>Melbourne's trusted auto repair specialists. Smash repair, mechanical, electrical and more — all under one roof in Braybrook.</p>
-        <div class="foot-brand-tag">
+        <div class="foot-brand-tag" style="display:flex;align-items:center;gap:14px;">
           <span class="pill p-out">Done With Satisfaction</span>
+          <a href="https://www.facebook.com/dlautocare" target="_blank" rel="noopener" class="foot-social" aria-label="DL Auto Care on Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
         </div>
       </div>
       <div class="foot-col animate d1">
