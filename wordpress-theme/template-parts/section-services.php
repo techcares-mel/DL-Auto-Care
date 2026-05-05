@@ -18,10 +18,10 @@ $services = new WP_Query( array(
 
 		<div class="services-grid">
 
-			<?php if ( $services->have_posts() ) : ?>
 			<?php
-			$is_first = true;
 			$i        = 0;
+			$is_first = true;
+			if ( $services->have_posts() ) : ?><?php
 			while ( $services->have_posts() ) :
 				$services->the_post();
 				$i++;
