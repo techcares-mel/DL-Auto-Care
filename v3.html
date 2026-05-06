@@ -1089,6 +1089,16 @@
   <svg width="18" height="18" fill="none" viewBox="0 0 18 18"><path d="M4 11l5-5 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </a>
 
+<!-- ═══ BOOKING MODAL ════════════════════════════════════════════ -->
+<div class="booking-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-label="Online Booking">
+  <div class="booking-box">
+    <button class="booking-close" id="bookingClose" aria-label="Close booking">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <iframe class="booking-iframe" src="about:blank" data-src="https://www.mechanicdesk.com.au/online-booking/75d4c8e7552f8e3c612a6cd966e771ba8296a332" title="Online Booking"></iframe>
+  </div>
+</div>
+
 <script>
   // Nav scroll + back-to-top visibility
   const nav = document.getElementById('nav');
@@ -1138,15 +1148,5 @@
   bookingOverlay.addEventListener('click', e => { if (e.target === bookingOverlay) closeBooking(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && bookingOverlay.classList.contains('open')) closeBooking(); });
 </script>
-
-<!-- ═══ BOOKING MODAL ════════════════════════════════════════════ -->
-<div class="booking-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-label="Online Booking">
-  <div class="booking-box">
-    <button class="booking-close" id="bookingClose" aria-label="Close booking">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
-    <iframe class="booking-iframe" src="about:blank" data-src="https://www.mechanicdesk.com.au/online-booking/75d4c8e7552f8e3c612a6cd966e771ba8296a332" title="Online Booking"></iframe>
-  </div>
-</div>
 </body>
 </html>
