@@ -495,11 +495,14 @@
     /* ── Booking Modal ─────────────────────────────────────────── */
     .booking-overlay { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,.72); display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; visibility:hidden; transition:opacity .3s ease,visibility .3s ease; }
     .booking-overlay.open { opacity:1; visibility:visible; }
-    .booking-box { background:#fff; border-radius:20px; width:min(920px,95vw); height:min(680px,88vh); position:relative; overflow:hidden; transform:translateY(16px); transition:transform .3s ease; }
+    .booking-box { background:#fff; border-radius:20px; width:min(920px,95vw); height:min(860px,93vh); display:flex; flex-direction:column; overflow:hidden; transform:translateY(16px); transition:transform .3s ease; }
     .booking-overlay.open .booking-box { transform:translateY(0); }
-    .booking-close { position:absolute; top:12px; right:12px; z-index:10; width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,.12); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#333; transition:background .2s; }
-    .booking-close:hover { background:rgba(0,0,0,.22); }
-    .booking-iframe { width:100%; height:100%; border:none; display:block; }
+    .booking-header { display:flex; align-items:flex-start; justify-content:space-between; padding:20px 24px 16px; border-bottom:1px solid rgba(0,0,0,.08); flex-shrink:0; }
+    .booking-header-text h3 { font-size:1.15rem; font-weight:700; color:#111; margin-bottom:4px; }
+    .booking-header-text p { font-size:.82rem; color:#777; margin:0; }
+    .booking-close { width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,.08); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#555; transition:background .2s; flex-shrink:0; margin-left:16px; }
+    .booking-close:hover { background:rgba(0,0,0,.18); }
+    .booking-iframe { flex:1; min-height:0; width:100%; border:none; display:block; }
   </style>
 </head>
 <body>
@@ -998,9 +1001,15 @@
 <!-- ═══ BOOKING MODAL ════════════════════════════════════════════ -->
 <div class="booking-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-label="Online Booking">
   <div class="booking-box">
-    <button class="booking-close" id="bookingClose" aria-label="Close booking">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+    <div class="booking-header">
+      <div class="booking-header-text">
+        <h3>Book a Service</h3>
+        <p>Fill in your details below and we'll confirm your appointment shortly.</p>
+      </div>
+      <button class="booking-close" id="bookingClose" aria-label="Close booking">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
     <iframe class="booking-iframe" src="about:blank" data-src="https://www.mechanicdesk.com.au/online-booking/75d4c8e7552f8e3c612a6cd966e771ba8296a332" title="Online Booking"></iframe>
   </div>
 </div>
