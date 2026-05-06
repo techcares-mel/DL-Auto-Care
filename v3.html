@@ -586,6 +586,15 @@
       .hero-split { grid-template-columns:1fr; padding-top:120px; gap:36px; }
       .hero-split-img { aspect-ratio:16/9; }
     }
+
+    /* ── Booking Modal ─────────────────────────────────────────── */
+    .booking-overlay { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,.72); display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; visibility:hidden; transition:opacity .3s ease,visibility .3s ease; }
+    .booking-overlay.open { opacity:1; visibility:visible; }
+    .booking-box { background:#fff; border-radius:20px; width:min(920px,95vw); height:min(680px,88vh); position:relative; overflow:hidden; transform:translateY(16px); transition:transform .3s ease; }
+    .booking-overlay.open .booking-box { transform:translateY(0); }
+    .booking-close { position:absolute; top:12px; right:12px; z-index:10; width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,.12); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#333; transition:background .2s; }
+    .booking-close:hover { background:rgba(0,0,0,.22); }
+    .booking-iframe { width:100%; height:100%; border:none; display:block; }
   </style>
 </head>
 <body>
@@ -610,7 +619,7 @@
       <a href="https://www.facebook.com/dlautocare" target="_blank" rel="noopener" class="nav-fb" aria-label="DL Auto Care on Facebook">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
       </a>
-      <a href="#contact" class="btn btn-primary">Book Now</a>
+      <a href="#" class="btn btn-primary open-booking">Book Now</a>
       <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -624,7 +633,7 @@
   <a href="#gallery"  class="mob-link">Gallery</a>
   <a href="#team"     class="mob-link">Team</a>
   <a href="#contact"  class="mob-link">Contact</a>
-  <a href="#contact"  class="mob-link btn btn-primary" style="margin-top:20px;font-size:1.4rem;">Book Now</a>
+  <a href="#" class="mob-link btn btn-primary open-booking" style="margin-top:20px;font-size:1.4rem;">Book Now</a>
   <span class="mob-nav-foot">DL Auto Care · 0423 310 713</span>
 </div>
 
@@ -645,7 +654,7 @@
         <h1 class="hero-h1">Done With<br><em>Satisfaction.</em></h1>
         <p class="hero-sub">Melbourne's trusted smash &amp; mechanical repair specialists. Honest advice, quality workmanship, every time.</p>
         <div class="hero-btns">
-          <a href="#contact" class="btn btn-primary">
+          <a href="#" class="btn btn-primary open-booking">
             Get a Quote
             <svg width="15" height="15" fill="none" viewBox="0 0 15 15"><path d="M3 7.5h9M8.5 4l3.5 3.5L8.5 11" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -774,7 +783,7 @@
         <div class="svc-arrow">→</div>
         <h3>Not Sure What You Need?</h3>
         <p>Bring your car in — our team will diagnose it and give you an honest quote, no pressure, no hidden fees.</p>
-        <a href="#contact" class="btn btn-primary" style="margin-top:24px;align-self:flex-start;">Free Quote</a>
+        <a href="#" class="btn btn-primary open-booking" style="margin-top:24px;align-self:flex-start;">Free Quote</a>
       </div>
 
     </div>
@@ -829,7 +838,7 @@
         </div>
 
         <div class="animate d5" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
-          <a href="#contact" class="btn btn-primary">Book a Service</a>
+          <a href="#" class="btn btn-primary open-booking">Book a Service</a>
           <a href="tel:0423310713" class="btn btn-ghost">0423 310 713</a>
         </div>
       </div>
@@ -1109,6 +1118,35 @@
     { threshold: 0.1 }
   );
   document.querySelectorAll('.animate, .animate-left, .animate-right, .animate-fade').forEach(el => obs.observe(el));
+
+  // Booking modal
+  const bookingOverlay = document.getElementById('bookingOverlay');
+  const bookingIframe  = bookingOverlay.querySelector('.booking-iframe');
+  let iframeLoaded = false;
+  function openBooking(e) {
+    e.preventDefault();
+    if (!iframeLoaded) { bookingIframe.src = bookingIframe.dataset.src; iframeLoaded = true; }
+    bookingOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeBooking() {
+    bookingOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.open-booking').forEach(b => b.addEventListener('click', openBooking));
+  document.getElementById('bookingClose').addEventListener('click', closeBooking);
+  bookingOverlay.addEventListener('click', e => { if (e.target === bookingOverlay) closeBooking(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && bookingOverlay.classList.contains('open')) closeBooking(); });
 </script>
+
+<!-- ═══ BOOKING MODAL ════════════════════════════════════════════ -->
+<div class="booking-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-label="Online Booking">
+  <div class="booking-box">
+    <button class="booking-close" id="bookingClose" aria-label="Close booking">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <iframe class="booking-iframe" src="about:blank" data-src="https://www.mechanicdesk.com.au/online-booking/75d4c8e7552f8e3c612a6cd966e771ba8296a332" title="Online Booking"></iframe>
+  </div>
+</div>
 </body>
 </html>
