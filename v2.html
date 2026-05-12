@@ -7,7 +7,7 @@
   <meta property="og:title" content="DL Auto Care — Done With Satisfaction">
   <meta property="og:description" content="Melbourne's trusted smash & mechanical repair specialists.">
   <meta property="og:image" content="image2.webp">
-  <title>DL Auto Care — Smash &amp; Mechanical Repair, Braybrook VIC</title>
+  <title>DL Auto Care — Design 2 (Dark)</title>
   <link rel="icon" href="DLAUto logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,14 +21,14 @@
     :root {
       --g:    #7ED321;
       --gd:   #5a9918;
-      --gdim: rgba(126,211,33,0.22);
-      --bg:   #f4f9e8;   /* bright light green — matches logo */
-      --s1:   #eaf4d4;   /* card surface */
-      --s2:   #e1efc8;   /* card dark */
-      --sg:   #d6e9b2;   /* green-tinted surface */
-      --w:    #1c2610;   /* dark text */
-      --m:    #627748;   /* muted text */
-      --br:   rgba(0,0,0,0.1);
+      --gdim: rgba(126,211,33,0.15);
+      --bg:   #0b1507;   /* near-black dark green */
+      --s1:   #132009;   /* dark card surface */
+      --s2:   #1a2c0e;   /* darker card */
+      --sg:   #1c3010;   /* dark green-tinted surface */
+      --w:    #f0f5e8;   /* near-white text */
+      --m:    #8aaa6e;   /* muted green-grey text */
+      --br:   rgba(255,255,255,0.08);
       --r:    24px;
       --rp:   999px;
       --cw:   1200px;
@@ -127,8 +127,8 @@
     .hero { position:relative; min-height:100svh; min-height:100vh; display:flex; align-items:center; overflow:hidden; }
     .hero-bg { position:absolute; inset:0; z-index:0; }
     .hero-bg img { width:100%; height:100%; object-fit:cover; object-position:center; }
-    /* Light green gradient — left side opaque for readability, fades right so image shows through */
-    .hero-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(105deg, rgba(244,249,232,.94) 25%, rgba(244,249,232,.65) 55%, rgba(244,249,232,.1) 100%); }
+    /* Dark gradient — left side opaque for readability, fades right so image shows through */
+    .hero-bg::after { content:''; position:absolute; inset:0; background:linear-gradient(105deg, rgba(11,21,7,.93) 25%, rgba(11,21,7,.65) 55%, rgba(11,21,7,.15) 100%); }
     .hero-content { position:relative; z-index:2; padding-top:110px; padding-bottom:80px; }
 
     .hero-ey  { animation:heroIn .6s ease .18s both; margin-bottom:28px; }
@@ -138,7 +138,7 @@
       color:var(--g); background:var(--gdim); border:1px solid rgba(126,211,33,.28);
       border-radius:var(--rp); padding:7px 16px;
     }
-    .hero-h1  { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(2.5rem,8.5vw,7.5rem); letter-spacing:-.04em; line-height:.93; animation:heroIn .65s ease .34s both; margin-bottom:28px; color:var(--w); }
+    .hero-h1  { font-family:'Syne',sans-serif; font-weight:800; font-size:clamp(2.5rem,8.5vw,7.5rem); letter-spacing:-.04em; line-height:.93; animation:heroIn .65s ease .34s both; margin-bottom:28px; color:#f0f5e8; }
     .hero-h1 em { font-style:normal; color:var(--g); }
     .hero-sub { font-size:clamp(1rem,1.6vw,1.1rem); color:var(--m); max-width:480px; line-height:1.75; margin-bottom:40px; animation:heroIn .65s ease .48s both; }
     .hero-btns { display:flex; flex-wrap:wrap; gap:12px; animation:heroIn .65s ease .6s both; }
@@ -462,6 +462,35 @@
       .contact-btns { flex-direction:column; }
       .contact-btns .btn { width:100%; justify-content:center; }
     }
+
+    /* ══ V2 DARK OVERRIDES ══════════════════════════════════════ */
+    /* Nav scrolled: dark bg */
+    .nav.scrolled { background:rgba(11,21,7,.97); border-bottom-color:rgba(255,255,255,.08); }
+
+    /* Section dark variants */
+    .sec-dk { background:var(--s2); }
+
+    /* Ghost buttons: white style throughout (site is dark) */
+    .btn-ghost { color:rgba(240,245,232,.8); border-color:rgba(240,245,232,.25); }
+    .btn-ghost:hover { border-color:rgba(240,245,232,.7); background:rgba(255,255,255,.07); color:#f0f5e8; }
+    .about-body .btn-ghost, .sec-g .btn-ghost,
+    .hero-btns .btn-ghost { color:rgba(240,245,232,.8); border-color:rgba(240,245,232,.25); }
+    .about-body .btn-ghost:hover, .sec-g .btn-ghost:hover,
+    .hero-btns .btn-ghost:hover { border-color:rgba(240,245,232,.7); background:rgba(255,255,255,.07); }
+
+    /* Contact cards: subtle light bg on dark */
+    .contact-card { background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.08); }
+
+    /* Stat pills in About */
+    .stat { background:var(--s2); }
+
+    /* Footer: even darker */
+    .footer { background:#060e03; }
+
+    /* Nav Facebook icon */
+    .nav-fb { color:var(--m); }
+    .nav-links a { color:var(--m); }
+    .nav-links a:hover { color:var(--w); }
 
     /* ── Booking Modal ─────────────────────────────────────────── */
     .booking-overlay { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,.72); display:flex; align-items:center; justify-content:center; padding:0; opacity:0; visibility:hidden; transition:opacity .3s ease,visibility .3s ease; }

@@ -5,10 +5,22 @@ wise.design__ref=godly.png
 screenshot-*.png
 ss-*.png
 
-# Node (Puppeteer)
+# Node (Puppeteer / tooling)
 node_modules/
 package*.json
 
-# OS
+# WordPress core — only the theme folder is committed
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/plugins/
+wp-content/themes/twenty*/
+*.log
+debug.log
+
+# OS / editor
 .DS_Store
 Thumbs.db
+.vscode/
+*.swp
