@@ -27,13 +27,13 @@ add_action( 'wp_enqueue_scripts', function () {
 		'dl-style',
 		get_stylesheet_uri(),
 		array( 'dl-fonts' ),
-		wp_get_theme()->get( 'Version' )
+		filemtime( get_stylesheet_directory() . '/style.css' )
 	);
 	wp_enqueue_script(
 		'dl-main',
 		get_template_directory_uri() . '/assets/js/main.js',
 		array(),
-		wp_get_theme()->get( 'Version' ),
+		filemtime( get_template_directory() . '/assets/js/main.js' ),
 		true
 	);
 } );
