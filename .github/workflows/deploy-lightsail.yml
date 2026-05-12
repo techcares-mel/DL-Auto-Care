@@ -26,31 +26,30 @@ jobs:
           echo "✅ All PHP files passed syntax check."
 
   deploy:
-    name: Deploy via SCP to Lightsail
+    name: Deploy via rsync to Lightsail
     runs-on: ubuntu-latest
     needs: lint
     steps:
       - uses: actions/checkout@v4
 
-      - name: Copy theme files to home directory (temp)
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ${{ secrets.LIGHTSAIL_USER }}
-          key: ${{ secrets.LIGHTSAIL_KEY }}
-          port: 22
-          source: "wordpress-theme/*"
-          target: "/home/bitnami/dl-auto-care-tmp/"
-          strip_components: 1
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.LIGHTSAIL_KEY }}" > ~/.ssh/lightsail.pem
+          chmod 600 ~/.ssh/lightsail.pem
+          ssh-keyscan -H ${{ secrets.LIGHTSAIL_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Move files into WordPress themes directory and fix permissions
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ${{ secrets.LIGHTSAIL_USER }}
-          key: ${{ secrets.LIGHTSAIL_KEY }}
-          port: 22
-          script: |
+      - name: Rsync theme files to Lightsail home (temp)
+        run: |
+          rsync -az --delete \
+            -e "ssh -i ~/.ssh/lightsail.pem -o StrictHostKeyChecking=no" \
+            wordpress-theme/ \
+            ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }}:/home/bitnami/dl-auto-care-tmp/
+
+      - name: Move files into WordPress themes dir and fix permissions
+        run: |
+          ssh -i ~/.ssh/lightsail.pem -o StrictHostKeyChecking=no \
+            ${{ secrets.LIGHTSAIL_USER }}@${{ secrets.LIGHTSAIL_HOST }} << 'EOF'
             sudo mkdir -p /opt/bitnami/wordpress/wp-content/themes/dl-auto-care/
             sudo cp -r /home/bitnami/dl-auto-care-tmp/. /opt/bitnami/wordpress/wp-content/themes/dl-auto-care/
             sudo chown -R bitnami:daemon /opt/bitnami/wordpress/wp-content/themes/dl-auto-care/
@@ -58,3 +57,4 @@ jobs:
             find /opt/bitnami/wordpress/wp-content/themes/dl-auto-care/ -type d -exec sudo chmod 755 {} \;
             rm -rf /home/bitnami/dl-auto-care-tmp/
             echo "✅ Deploy complete."
+          EOF
