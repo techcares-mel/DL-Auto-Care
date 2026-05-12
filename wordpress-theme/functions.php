@@ -423,12 +423,12 @@ add_action( 'customize_register', function ( $wp_customize ) {
 	) );
 
 	// CF7 quote form ID
-	$wp_customize->add_setting( 'dl_cf7_quote_form_id', array( 'default' => '', 'sanitize_callback' => 'absint' ) );
+	$wp_customize->add_setting( 'dl_cf7_quote_form_id', array( 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ) );
 	$wp_customize->add_control( 'dl_cf7_quote_form_id', array(
 		'label'       => 'Get a Quote — CF7 Form ID',
-		'description' => 'After installing Contact Form 7, go to Contact → Contact Forms and paste the form ID number here.',
+		'description' => 'After installing Contact Form 7, go to Contact → Contact Forms. Click your form and copy the ID from the URL (e.g. post=123) or from the shortcode shown on the form list.',
 		'section'     => 'dl_contact',
-		'type'        => 'number',
+		'type'        => 'text',
 	) );
 
 	// ── Hero: extra fields ───────────────────────────────────────────────────────

@@ -86,9 +86,9 @@
 		</div>
 		<div class="quote-body">
 			<?php
-			$cf7_id = absint( get_theme_mod( 'dl_cf7_quote_form_id', 0 ) );
+			$cf7_id = sanitize_text_field( get_theme_mod( 'dl_cf7_quote_form_id', '' ) );
 			if ( $cf7_id && function_exists( 'wpcf7_contact_form' ) ) {
-				echo do_shortcode( '[contact-form-7 id="' . $cf7_id . '"]' );
+				echo do_shortcode( '[contact-form-7 id="' . esc_attr( $cf7_id ) . '"]' );
 			} else {
 				echo '<p class="quote-placeholder">Contact form not yet configured. Go to <strong>Appearance &rarr; Customize &rarr; Contact &amp; Hours</strong> and enter your CF7 form ID after installing Contact Form 7.</p>';
 			}
