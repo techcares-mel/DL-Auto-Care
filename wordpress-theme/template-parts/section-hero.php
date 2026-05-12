@@ -15,7 +15,7 @@ $tags    = array_filter( array_map( 'trim', explode( ',', $tags_raw ) ) );
 
 $img1 = dl_get( 'dl_gallery_image1', '' );
 if ( ! $img1 ) {
-	$img1 = get_template_directory_uri() . '/assets/images/image1.webp';
+	$img1 = get_template_directory_uri() . '/assets/images/hero.png';
 }
 ?>
 <section class="hero" aria-label="Hero">
