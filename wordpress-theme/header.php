@@ -34,7 +34,7 @@
 			<li><a href="#contact" class="nav-link">Contact</a></li>
 		</ul>
 
-		<a href="#contact" class="btn btn-primary nav-cta">Book Now</a>
+		<button type="button" class="btn btn-primary nav-cta open-booking">Book Now</button>
 
 		<button id="burger" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobNav">
 			<span aria-hidden="true"></span>
@@ -54,5 +54,5 @@
 		<li><a href="#team" class="mob-link">Team</a></li>
 		<li><a href="#contact" class="mob-link">Contact</a></li>
 	</ul>
-	<a href="#contact" class="btn btn-primary mob-link mob-cta">Book Now</a>
+	<button type="button" class="btn btn-primary mob-link mob-cta open-booking">Book Now</button>
 </div>

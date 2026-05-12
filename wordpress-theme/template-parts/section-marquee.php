@@ -1,20 +1,16 @@
 <?php
 /**
- * Marquee strip — infinite scrolling service names. Hardcoded (rarely changes).
+ * Marquee strip — infinite scrolling service names. Editable via Customizer.
  */
 
-$items = array(
-	'Smash Repair',
-	'Spray Painting',
-	'Mechanical Repair',
-	'Windscreen Repair',
-	'Log Book Service',
-	'Panel Beating',
-	'Dent Removal',
-	'Wheel & Tyre',
-	'Engine Repair',
-	'Suspension',
+$items_raw = dl_get(
+	'dl_marquee_items',
+	'Smash Repair, Spray Painting, Mechanical Repair, Windscreen Repair, Log Book Service, Panel Beating, Dent Removal, Wheel & Tyre, Engine Repair, Suspension'
 );
+$items = array_filter( array_map( 'trim', explode( ',', $items_raw ) ) );
+if ( empty( $items ) ) {
+	return;
+}
 
 $inner = '';
 foreach ( $items as $item ) {

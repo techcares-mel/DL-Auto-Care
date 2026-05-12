@@ -4,6 +4,9 @@
  * Desktop: 3-column grid. Mobile: CSS scroll-snap carousel.
  */
 
+$eyebrow  = dl_get( 'dl_testimonials_eyebrow', 'Reviews' );
+$headline = dl_get( 'dl_testimonials_headline', 'What Our Customers Say' );
+
 $testimonials = new WP_Query( array(
 	'post_type'      => 'testimonial',
 	'posts_per_page' => -1,
@@ -13,8 +16,8 @@ $testimonials = new WP_Query( array(
 <section id="testimonials" class="sec testimonials-sec">
 	<div class="container">
 
-		<p class="eyebrow animate animate-d1">Reviews</p>
-		<h2 class="sec-title animate">What Our Customers Say</h2>
+		<p class="eyebrow animate animate-d1"><?php echo esc_html( $eyebrow ); ?></p>
+		<h2 class="sec-title animate"><?php echo esc_html( $headline ); ?></h2>
 
 		<?php if ( $testimonials->have_posts() ) : ?>
 		<div class="testimonials-grid">

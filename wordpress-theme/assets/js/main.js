@@ -49,6 +49,17 @@
     }, { passive: true });
   }
 
+  // ── Back to top ─────────────────────────────────────────────────
+  var backTop = document.getElementById('backTop');
+  if (backTop) {
+    window.addEventListener('scroll', function () {
+      backTop.classList.toggle('show', window.scrollY > 400);
+    }, { passive: true });
+    backTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
   // ── Hamburger menu ──────────────────────────────────────────────
   var burger = document.getElementById('burger');
   var mobNav = document.getElementById('mobNav');
@@ -71,9 +82,72 @@
     link.addEventListener('click', function () { toggleMenu(false); });
   });
 
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') toggleMenu(false);
-  });
+  // ── MechanicDesk Booking Modal ──────────────────────────────────
+  var bookingOverlay = document.getElementById('bookingOverlay');
+  if (bookingOverlay) {
+    var bookingIframe = bookingOverlay.querySelector('.booking-iframe');
+    var iframeLoaded  = false;
+
+    function openBooking(e) {
+      if (e) e.preventDefault();
+      if (!iframeLoaded && bookingIframe) {
+        bookingIframe.src = bookingIframe.dataset.src;
+        iframeLoaded = true;
+      }
+      bookingOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBooking() {
+      bookingOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.open-booking').forEach(function (btn) {
+      btn.addEventListener('click', openBooking);
+    });
+
+    var bookingClose = document.getElementById('bookingClose');
+    if (bookingClose) bookingClose.addEventListener('click', closeBooking);
+
+    bookingOverlay.addEventListener('click', function (e) {
+      if (e.target === bookingOverlay) closeBooking();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && bookingOverlay.classList.contains('open')) closeBooking();
+    });
+  }
+
+  // ── Get a Quote Modal (Contact Form 7) ──────────────────────────
+  var quoteOverlay = document.getElementById('quoteOverlay');
+  if (quoteOverlay) {
+    function openQuote(e) {
+      if (e) e.preventDefault();
+      quoteOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeQuote() {
+      quoteOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.open-quote').forEach(function (btn) {
+      btn.addEventListener('click', openQuote);
+    });
+
+    var quoteClose = document.getElementById('quoteClose');
+    if (quoteClose) quoteClose.addEventListener('click', closeQuote);
+
+    quoteOverlay.addEventListener('click', function (e) {
+      if (e.target === quoteOverlay) closeQuote();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && quoteOverlay.classList.contains('open')) closeQuote();
+    });
+  }
 
   // ── Scroll animations (IntersectionObserver) ────────────────────
   var obs = new IntersectionObserver(function (entries) {

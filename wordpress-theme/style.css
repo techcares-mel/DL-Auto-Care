@@ -301,6 +301,105 @@ h1, h2, h3 { line-height: 1.1; }
 
 .footer-bar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:28px; border-top:1px solid rgba(255,255,255,.06); font-size:.78rem; color:rgba(255,255,255,.4); }
 
+/* ══ CONTACT MAP ═════════════════════════════════════════════════ */
+.contact-map { border-radius: var(--r); overflow: hidden; margin-top: 48px; border: 1px solid var(--br); }
+.contact-map iframe { display: block; }
+
+/* ══ BACK TO TOP ═════════════════════════════════════════════════ */
+.back-top { position:fixed; bottom:28px; right:24px; z-index:100; width:44px; height:44px; border-radius:50%; background:var(--g); color:#0d0d0d; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .3s, transform .3s; transform:translateY(12px); }
+.back-top.show { opacity:1; pointer-events:all; transform:translateY(0); }
+.back-top:hover { background:var(--gd); }
+
+/* ══ SHARED MODAL BASE ═══════════════════════════════════════════ */
+.booking-overlay,
+.quote-overlay {
+  position:fixed; inset:0; z-index:500;
+  background:rgba(0,0,0,.72);
+  display:flex; align-items:center; justify-content:center;
+  padding:0;
+  opacity:0; visibility:hidden;
+  transition:opacity .3s ease, visibility .3s ease;
+}
+.booking-overlay.open,
+.quote-overlay.open { opacity:1; visibility:visible; }
+
+/* ══ BOOKING MODAL (MechanicDesk — full screen) ══════════════════ */
+.booking-box {
+  background:#fff; border-radius:0;
+  width:min(960px,100vw); height:100vh; height:100dvh;
+  display:flex; flex-direction:column; overflow:hidden;
+  transform:translateY(16px); transition:transform .3s ease;
+}
+.booking-overlay.open .booking-box { transform:translateY(0); }
+@media (min-width:640px) {
+  .booking-overlay { padding:24px; }
+  .booking-box { border-radius:20px; height:calc(100dvh - 48px); }
+}
+.booking-header {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  padding:20px 24px 16px; border-bottom:1px solid rgba(0,0,0,.08); flex-shrink:0;
+}
+.booking-header-text h3 { font-size:1.15rem; font-weight:700; color:#111; margin-bottom:4px; }
+.booking-header-text p  { font-size:.82rem; color:#777; margin:0; }
+.booking-close {
+  width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,.08);
+  border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  color:#555; transition:background .2s; flex-shrink:0; margin-left:16px;
+}
+.booking-close:hover { background:rgba(0,0,0,.18); }
+.booking-iframe { flex:1; min-height:0; width:100%; border:none; display:block; }
+
+/* ══ QUOTE MODAL (Contact Form 7) ════════════════════════════════ */
+.quote-box {
+  background:#fff; border-radius:20px;
+  width:min(560px,calc(100vw - 32px));
+  max-height:calc(100dvh - 48px);
+  display:flex; flex-direction:column; overflow:hidden;
+  transform:translateY(16px); transition:transform .3s ease;
+}
+.quote-overlay.open .quote-box { transform:translateY(0); }
+.quote-header {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  padding:20px 24px 16px; border-bottom:1px solid rgba(0,0,0,.08); flex-shrink:0;
+}
+.quote-header-text h3 { font-size:1.15rem; font-weight:700; color:#111; margin-bottom:4px; }
+.quote-header-text p  { font-size:.82rem; color:#777; margin:0; }
+.quote-close {
+  width:36px; height:36px; border-radius:50%; background:rgba(0,0,0,.08);
+  border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  color:#555; transition:background .2s; flex-shrink:0; margin-left:16px;
+}
+.quote-close:hover { background:rgba(0,0,0,.18); }
+.quote-body { flex:1; overflow-y:auto; padding:24px; }
+.quote-placeholder { font-size:.9rem; color:var(--m); line-height:1.65; }
+
+/* CF7 form overrides inside quote modal */
+.quote-body .wpcf7-form { display:flex; flex-direction:column; gap:16px; }
+.quote-body .wpcf7-form p { margin:0; }
+.quote-body .wpcf7-form input[type="text"],
+.quote-body .wpcf7-form input[type="email"],
+.quote-body .wpcf7-form input[type="tel"],
+.quote-body .wpcf7-form textarea,
+.quote-body .wpcf7-form select {
+  width:100%; border:1.5px solid var(--br); border-radius:12px;
+  padding:12px 16px; font-family:'Inter',sans-serif; font-size:.95rem;
+  color:var(--w); background:#fff; transition:border-color .2s; outline:none;
+}
+.quote-body .wpcf7-form input:focus,
+.quote-body .wpcf7-form textarea:focus,
+.quote-body .wpcf7-form select:focus { border-color:var(--g); }
+.quote-body .wpcf7-form textarea { min-height:120px; resize:vertical; }
+.quote-body .wpcf7-form input[type="submit"],
+.quote-body .wpcf7-submit {
+  background:var(--g); color:#0d0d0d; border:none; border-radius:var(--rp);
+  padding:14px 28px; font-family:'Inter',sans-serif; font-size:.95rem; font-weight:600;
+  cursor:pointer; transition:background .22s; min-height:48px; align-self:flex-start;
+}
+.quote-body .wpcf7-form input[type="submit"]:hover,
+.quote-body .wpcf7-submit:hover { background:var(--gd); }
+.quote-body .wpcf7-not-valid-tip { font-size:.78rem; color:#d0021b; margin-top:4px; display:block; }
+.quote-body .wpcf7-response-output { font-size:.88rem; border-radius:8px; padding:10px 14px; margin-top:8px; }
+
 /* ══ 404 ═════════════════════════════════════════════════════════ */
 .not-found-wrap { display:flex; align-items:center; justify-content:center; min-height:80vh; }
 .not-found-inner { text-align:center; padding:120px 24px; }

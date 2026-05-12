@@ -1,0 +1,57 @@
+name: Deploy Theme to Lightsail Staging
+
+on:
+  push:
+    branches: [staging]
+    paths:
+      - 'wordpress-theme/**'
+      - '.github/workflows/deploy-lightsail.yml'
+
+jobs:
+  lint:
+    name: PHP Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Check PHP syntax
+        run: |
+          echo "Checking PHP syntax in wordpress-theme/..."
+          find wordpress-theme -name "*.php" -print0 | xargs -0 -n1 php -l
+          echo "✅ All PHP files passed syntax check."
+
+  deploy:
+    name: Deploy via SCP to Lightsail
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy theme files to Lightsail
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USER }}
+          key: ${{ secrets.LIGHTSAIL_KEY }}
+          port: 22
+          source: "wordpress-theme/*"
+          target: "/opt/bitnami/wordpress/wp-content/themes/dl-auto-care/"
+          strip_components: 1
+
+      - name: Fix file permissions
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USER }}
+          key: ${{ secrets.LIGHTSAIL_KEY }}
+          port: 22
+          script: |
+            sudo chown -R bitnami:daemon /opt/bitnami/wordpress/wp-content/themes/dl-auto-care/
+            find /opt/bitnami/wordpress/wp-content/themes/dl-auto-care/ -type f -exec chmod 644 {} \;
+            find /opt/bitnami/wordpress/wp-content/themes/dl-auto-care/ -type d -exec chmod 755 {} \;
+            echo "✅ Permissions fixed."

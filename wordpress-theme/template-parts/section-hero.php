@@ -3,10 +3,16 @@
  * Hero section — full-viewport with background image, headline, CTA buttons.
  */
 
-$h1   = dl_get( 'dl_hero_headline1', 'Done With' );
-$h2   = dl_get( 'dl_hero_headline2', 'Satisfaction.' );
-$sub  = dl_get( 'dl_hero_sub', 'Melbourne\'s trusted smash &amp; mechanical repair specialists.' );
-$addr = dl_get( 'dl_contact_address', '2-3/9 Lacy St, Braybrook VIC 3019' );
+$h1      = dl_get( 'dl_hero_headline1', 'Done With' );
+$h2      = dl_get( 'dl_hero_headline2', 'Satisfaction.' );
+$sub     = dl_get( 'dl_hero_sub', 'Melbourne\'s trusted smash &amp; mechanical repair specialists.' );
+$addr    = dl_get( 'dl_contact_address', '2-3/9 Lacy St, Braybrook VIC 3019' );
+$eyebrow = dl_get( 'dl_hero_eyebrow', 'Smash & Mechanical' );
+$btn1    = dl_get( 'dl_hero_btn1_label', 'Get a Quote' );
+$btn2    = dl_get( 'dl_hero_btn2_label', 'Our Services' );
+$tags_raw = dl_get( 'dl_hero_tags', 'Smash Repair, Spray Painting, Mechanical, Windscreen, Log Book' );
+$tags    = array_filter( array_map( 'trim', explode( ',', $tags_raw ) ) );
+
 $img1 = dl_get( 'dl_gallery_image1', '' );
 if ( ! $img1 ) {
 	$img1 = get_template_directory_uri() . '/assets/images/image1.webp';
@@ -25,7 +31,7 @@ if ( ! $img1 ) {
 	<div class="container hero-body">
 
 		<span class="eyebrow hero-eyebrow">
-			<?php echo esc_html( $addr ); ?> &nbsp;&middot;&nbsp; Smash &amp; Mechanical
+			<?php echo esc_html( $addr ); ?> &nbsp;&middot;&nbsp; <?php echo esc_html( $eyebrow ); ?>
 		</span>
 
 		<h1 class="hero-headline">
@@ -36,17 +42,17 @@ if ( ! $img1 ) {
 		<p class="hero-sub"><?php echo esc_html( $sub ); ?></p>
 
 		<div class="hero-buttons">
-			<a href="#contact" class="btn btn-primary">Get a Quote</a>
-			<a href="#services" class="btn btn-ghost">Our Services</a>
+			<button class="btn btn-primary open-quote" type="button"><?php echo esc_html( $btn1 ); ?></button>
+			<a href="#services" class="btn btn-ghost"><?php echo esc_html( $btn2 ); ?></a>
 		</div>
 
+		<?php if ( $tags ) : ?>
 		<div class="hero-tags" aria-label="Services at a glance">
-			<span class="tag">Smash Repair</span>
-			<span class="tag">Spray Painting</span>
-			<span class="tag">Mechanical</span>
-			<span class="tag">Windscreen</span>
-			<span class="tag">Log Book</span>
+			<?php foreach ( $tags as $tag ) : ?>
+			<span class="tag"><?php echo esc_html( $tag ); ?></span>
+			<?php endforeach; ?>
 		</div>
+		<?php endif; ?>
 
 	</div>
 

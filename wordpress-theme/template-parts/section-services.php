@@ -4,6 +4,12 @@
  * First post = featured wide card. Last card = static CTA (always shown).
  */
 
+$eyebrow   = dl_get( 'dl_services_eyebrow', 'What We Do' );
+$headline  = dl_get( 'dl_services_headline', 'Our Services' );
+$cta_title = dl_get( 'dl_services_cta_title', 'Not Sure What You Need?' );
+$cta_desc  = dl_get( 'dl_services_cta_desc', 'Give us a call — we\'ll help you figure out exactly what your car needs and give you an honest quote.' );
+$cta_btn   = dl_get( 'dl_services_cta_btn', 'Get in Touch' );
+
 $services = new WP_Query( array(
 	'post_type'      => 'service',
 	'posts_per_page' => -1,
@@ -13,8 +19,8 @@ $services = new WP_Query( array(
 <section id="services" class="sec services-sec">
 	<div class="container">
 
-		<p class="eyebrow animate animate-d1">What We Do</p>
-		<h2 class="sec-title animate">Our Services</h2>
+		<p class="eyebrow animate animate-d1"><?php echo esc_html( $eyebrow ); ?></p>
+		<h2 class="sec-title animate"><?php echo esc_html( $headline ); ?></h2>
 
 		<div class="services-grid">
 
@@ -56,9 +62,9 @@ $services = new WP_Query( array(
 
 			<!-- Static CTA card — always shown last -->
 			<article class="service-card service-card--cta animate animate-d<?php echo esc_attr( min( $i + 1, 6 ) ); ?>">
-				<h3>Not Sure What You Need?</h3>
-				<p>Give us a call — we&#8217;ll help you figure out exactly what your car needs and give you an honest quote.</p>
-				<a href="#contact" class="btn btn-primary" style="margin-top:auto">Get in Touch</a>
+				<h3><?php echo esc_html( $cta_title ); ?></h3>
+				<p><?php echo esc_html( $cta_desc ); ?></p>
+				<a href="#contact" class="btn btn-primary" style="margin-top:auto"><?php echo esc_html( $cta_btn ); ?></a>
 			</article>
 
 		</div>

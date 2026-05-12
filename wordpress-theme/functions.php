@@ -392,13 +392,145 @@ add_action( 'customize_register', function ( $wp_customize ) {
 		'dl_contact_phone'          => array( 'label' => 'Phone Number', 'default' => '0423 310 713' ),
 		'dl_contact_hours_weekday'  => array( 'label' => 'Weekday Hours', 'default' => 'Mon–Fri 8am–6pm' ),
 		'dl_contact_hours_saturday' => array( 'label' => 'Saturday Hours', 'default' => 'Sat 8am–2pm' ),
-		'dl_contact_maps_url'       => array( 'label' => 'Google Maps URL', 'default' => 'https://maps.google.com/?q=2-3/9+Lacy+St+Braybrook+VIC+3019' ),
+		'dl_contact_maps_url'       => array( 'label' => 'Google Maps Directions URL', 'default' => 'https://maps.google.com/?q=2-3/9+Lacy+St+Braybrook+VIC+3019' ),
 		'dl_contact_specialties'    => array( 'label' => 'Specialties (shown in contact box)', 'default' => 'Smash Repair · Mechanical · Spray Painting' ),
 	);
 	foreach ( $contact_fields as $id => $args ) {
 		$wp_customize->add_setting( $id, array( 'default' => $args['default'], 'sanitize_callback' => 'sanitize_text_field' ) );
 		$wp_customize->add_control( $id, array( 'label' => $args['label'], 'section' => 'dl_contact', 'type' => 'text' ) );
 	}
+
+	// Contact section headings + Sunday label
+	$wp_customize->add_setting( 'dl_contact_eyebrow', array( 'default' => 'Get In Touch', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_contact_eyebrow', array( 'label' => 'Section Eyebrow', 'section' => 'dl_contact', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_contact_headline', array( 'default' => 'Ready to Book?', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_contact_headline', array( 'label' => 'Section Headline', 'section' => 'dl_contact', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_contact_subtext', array(
+		'default'           => 'Bring your car in or give us a call. We\'ll give you an honest assessment and a fair quote — no surprises.',
+		'sanitize_callback' => 'sanitize_textarea_field',
+	) );
+	$wp_customize->add_control( 'dl_contact_subtext', array( 'label' => 'Sub-text', 'section' => 'dl_contact', 'type' => 'textarea' ) );
+	$wp_customize->add_setting( 'dl_contact_sunday', array( 'default' => 'Sun Closed', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_contact_sunday', array( 'label' => 'Sunday Hours Label', 'section' => 'dl_contact', 'type' => 'text' ) );
+
+	// Google Maps embed URL (separate from directions link — use the iframe src)
+	$wp_customize->add_setting( 'dl_contact_maps_embed', array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+	$wp_customize->add_control( 'dl_contact_maps_embed', array(
+		'label'       => 'Google Maps Embed URL',
+		'description' => 'Get this from Google Maps → Share → Embed a map → copy the src value from the iframe code. Leave blank to hide the map.',
+		'section'     => 'dl_contact',
+		'type'        => 'url',
+	) );
+
+	// CF7 quote form ID
+	$wp_customize->add_setting( 'dl_cf7_quote_form_id', array( 'default' => '', 'sanitize_callback' => 'absint' ) );
+	$wp_customize->add_control( 'dl_cf7_quote_form_id', array(
+		'label'       => 'Get a Quote — CF7 Form ID',
+		'description' => 'After installing Contact Form 7, go to Contact → Contact Forms and paste the form ID number here.',
+		'section'     => 'dl_contact',
+		'type'        => 'number',
+	) );
+
+	// ── Hero: extra fields ───────────────────────────────────────────────────────
+	$wp_customize->add_setting( 'dl_hero_eyebrow', array( 'default' => 'Smash & Mechanical', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_hero_eyebrow', array( 'label' => 'Eyebrow (beside address)', 'section' => 'dl_hero', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_hero_btn1_label', array( 'default' => 'Get a Quote', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_hero_btn1_label', array( 'label' => 'Primary Button Label', 'section' => 'dl_hero', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_hero_btn2_label', array( 'default' => 'Our Services', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_hero_btn2_label', array( 'label' => 'Ghost Button Label', 'section' => 'dl_hero', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_hero_tags', array(
+		'default'           => 'Smash Repair, Spray Painting, Mechanical, Windscreen, Log Book',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'dl_hero_tags', array(
+		'label'       => 'Hero Tag Pills',
+		'description' => 'Comma-separated list of service highlights shown below the buttons.',
+		'section'     => 'dl_hero',
+		'type'        => 'text',
+	) );
+
+	// ── Panel: Marquee ───────────────────────────────────────────────────────────
+	$wp_customize->add_panel( 'dl_marquee_panel', array( 'title' => 'Marquee Strip', 'priority' => 34 ) );
+	$wp_customize->add_section( 'dl_marquee', array( 'title' => 'Marquee Items', 'panel' => 'dl_marquee_panel',
+		'description' => 'Comma-separated service names that scroll across the green strip.' ) );
+	$wp_customize->add_setting( 'dl_marquee_items', array(
+		'default'           => 'Smash Repair, Spray Painting, Mechanical Repair, Windscreen Repair, Log Book Service, Panel Beating, Dent Removal, Wheel & Tyre, Engine Repair, Suspension',
+		'sanitize_callback' => 'sanitize_textarea_field',
+	) );
+	$wp_customize->add_control( 'dl_marquee_items', array( 'label' => 'Service Names (comma-separated)', 'section' => 'dl_marquee', 'type' => 'textarea' ) );
+
+	// ── Panel: Services Section ──────────────────────────────────────────────────
+	$wp_customize->add_panel( 'dl_services_panel', array( 'title' => 'Services Section', 'priority' => 35 ) );
+	$wp_customize->add_section( 'dl_services_sec', array( 'title' => 'Section Text & CTA Card', 'panel' => 'dl_services_panel' ) );
+	$svc_fields = array(
+		'dl_services_eyebrow'  => array( 'label' => 'Eyebrow', 'default' => 'What We Do' ),
+		'dl_services_headline' => array( 'label' => 'Headline', 'default' => 'Our Services' ),
+		'dl_services_cta_title'=> array( 'label' => 'CTA Card — Title', 'default' => 'Not Sure What You Need?' ),
+		'dl_services_cta_desc' => array( 'label' => 'CTA Card — Description', 'default' => 'Give us a call — we\'ll help you figure out exactly what your car needs and give you an honest quote.' ),
+		'dl_services_cta_btn'  => array( 'label' => 'CTA Card — Button Label', 'default' => 'Get in Touch' ),
+	);
+	foreach ( $svc_fields as $id => $args ) {
+		$wp_customize->add_setting( $id, array( 'default' => $args['default'], 'sanitize_callback' => 'sanitize_text_field' ) );
+		$wp_customize->add_control( $id, array( 'label' => $args['label'], 'section' => 'dl_services_sec', 'type' => 'text' ) );
+	}
+
+	// ── Panel: Statement Band ────────────────────────────────────────────────────
+	$wp_customize->add_panel( 'dl_statement_panel', array( 'title' => 'Statement Band', 'priority' => 36 ) );
+	$wp_customize->add_section( 'dl_statement', array( 'title' => 'Promise & Stats', 'panel' => 'dl_statement_panel' ) );
+	$wp_customize->add_setting( 'dl_statement_eyebrow', array( 'default' => 'Our Promise', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_statement_eyebrow', array( 'label' => 'Eyebrow', 'section' => 'dl_statement', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_statement_quote', array( 'default' => 'Quality work. Honest price. Every time.', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_statement_quote', array( 'label' => 'Brand Promise Quote', 'section' => 'dl_statement', 'type' => 'text' ) );
+	$stmt_stats = array(
+		1 => array( 'v' => '500+', 'l' => 'Cars Repaired' ),
+		2 => array( 'v' => '15 Yrs', 'l' => 'Experience' ),
+		3 => array( 'v' => '5★', 'l' => 'Google Rating' ),
+	);
+	foreach ( $stmt_stats as $n => $d ) {
+		$wp_customize->add_setting( "dl_statement_stat{$n}_v", array( 'default' => $d['v'], 'sanitize_callback' => 'sanitize_text_field' ) );
+		$wp_customize->add_control( "dl_statement_stat{$n}_v", array( 'label' => "Stat {$n} — Value", 'section' => 'dl_statement', 'type' => 'text' ) );
+		$wp_customize->add_setting( "dl_statement_stat{$n}_l", array( 'default' => $d['l'], 'sanitize_callback' => 'sanitize_text_field' ) );
+		$wp_customize->add_control( "dl_statement_stat{$n}_l", array( 'label' => "Stat {$n} — Label", 'section' => 'dl_statement', 'type' => 'text' ) );
+	}
+
+	// ── About: extra fields ──────────────────────────────────────────────────────
+	$wp_customize->add_setting( 'dl_about_eyebrow', array( 'default' => 'About Us', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_about_eyebrow', array( 'label' => 'Eyebrow', 'section' => 'dl_about', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_about_headline', array( 'default' => 'We Take Pride in Every Job', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_about_headline', array( 'label' => 'Section Headline', 'section' => 'dl_about', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_about_btn_label', array( 'default' => 'Book a Service', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_about_btn_label', array( 'label' => 'Primary Button Label', 'section' => 'dl_about', 'type' => 'text' ) );
+
+	// ── Gallery: section text ────────────────────────────────────────────────────
+	$wp_customize->add_setting( 'dl_gallery_eyebrow', array( 'default' => 'Our Work', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_gallery_eyebrow', array( 'label' => 'Gallery Section Eyebrow', 'section' => 'dl_images', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_gallery_headline', array( 'default' => 'See the Results', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_gallery_headline', array( 'label' => 'Gallery Section Headline', 'section' => 'dl_images', 'type' => 'text' ) );
+
+	// ── Panel: Team Section ──────────────────────────────────────────────────────
+	$wp_customize->add_panel( 'dl_team_panel', array( 'title' => 'Team Section', 'priority' => 37 ) );
+	$wp_customize->add_section( 'dl_team_sec', array( 'title' => 'Section Headings', 'panel' => 'dl_team_panel' ) );
+	$wp_customize->add_setting( 'dl_team_eyebrow', array( 'default' => 'Meet the Team', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_team_eyebrow', array( 'label' => 'Eyebrow', 'section' => 'dl_team_sec', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_team_headline', array( 'default' => 'The People Behind the Work', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_team_headline', array( 'label' => 'Headline', 'section' => 'dl_team_sec', 'type' => 'text' ) );
+
+	// ── Panel: Testimonials Section ──────────────────────────────────────────────
+	$wp_customize->add_panel( 'dl_testimonials_panel', array( 'title' => 'Testimonials Section', 'priority' => 38 ) );
+	$wp_customize->add_section( 'dl_testimonials_sec', array( 'title' => 'Section Headings', 'panel' => 'dl_testimonials_panel' ) );
+	$wp_customize->add_setting( 'dl_testimonials_eyebrow', array( 'default' => 'Reviews', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_testimonials_eyebrow', array( 'label' => 'Eyebrow', 'section' => 'dl_testimonials_sec', 'type' => 'text' ) );
+	$wp_customize->add_setting( 'dl_testimonials_headline', array( 'default' => 'What Our Customers Say', 'sanitize_callback' => 'sanitize_text_field' ) );
+	$wp_customize->add_control( 'dl_testimonials_headline', array( 'label' => 'Headline', 'section' => 'dl_testimonials_sec', 'type' => 'text' ) );
+
+	// ── Panel: Footer ────────────────────────────────────────────────────────────
+	$wp_customize->add_panel( 'dl_footer_panel', array( 'title' => 'Footer', 'priority' => 39 ) );
+	$wp_customize->add_section( 'dl_footer_sec', array( 'title' => 'Footer Text', 'panel' => 'dl_footer_panel' ) );
+	$wp_customize->add_setting( 'dl_footer_tagline', array(
+		'default'           => 'Melbourne\'s trusted auto repair specialists. Honest advice, quality workmanship, every time.',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'dl_footer_tagline', array( 'label' => 'Footer Tagline', 'section' => 'dl_footer_sec', 'type' => 'text' ) );
 } );
 
 // ── Holiday Banner Admin Page ─────────────────────────────────────────────────

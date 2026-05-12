@@ -3,7 +3,9 @@
  * Gallery / Bento grid — 12-column CSS grid with two Customizer images.
  */
 
-$img1 = dl_get( 'dl_gallery_image1', '' );
+$eyebrow  = dl_get( 'dl_gallery_eyebrow', 'Our Work' );
+$headline = dl_get( 'dl_gallery_headline', 'See the Results' );
+$img1     = dl_get( 'dl_gallery_image1', '' );
 if ( ! $img1 ) {
 	$img1 = get_template_directory_uri() . '/assets/images/image1.webp';
 }
@@ -15,8 +17,8 @@ if ( ! $img2 ) {
 <section id="gallery" class="sec gallery-sec">
 	<div class="container">
 
-		<p class="eyebrow animate animate-d1">Our Work</p>
-		<h2 class="sec-title animate">See the Results</h2>
+		<p class="eyebrow animate animate-d1"><?php echo esc_html( $eyebrow ); ?></p>
+		<h2 class="sec-title animate"><?php echo esc_html( $headline ); ?></h2>
 
 		<div class="bento-grid" aria-label="Photo gallery">
 

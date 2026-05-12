@@ -4,6 +4,9 @@
  * Featured Image = photo. _team_job_title meta = role. Post title = name.
  */
 
+$eyebrow  = dl_get( 'dl_team_eyebrow', 'Meet the Team' );
+$headline = dl_get( 'dl_team_headline', 'The People Behind the Work' );
+
 $team = new WP_Query( array(
 	'post_type'      => 'team_member',
 	'posts_per_page' => -1,
@@ -13,8 +16,8 @@ $team = new WP_Query( array(
 <section id="team" class="sec team-sec">
 	<div class="container">
 
-		<p class="eyebrow animate animate-d1">Meet the Team</p>
-		<h2 class="sec-title animate">The People Behind the Work</h2>
+		<p class="eyebrow animate animate-d1"><?php echo esc_html( $eyebrow ); ?></p>
+		<h2 class="sec-title animate"><?php echo esc_html( $headline ); ?></h2>
 
 		<?php if ( $team->have_posts() ) : ?>
 		<div class="team-grid">
